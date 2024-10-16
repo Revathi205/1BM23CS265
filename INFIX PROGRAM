@@ -1,0 +1,66 @@
+INFIX TO POSTFIX EXPRESSION
+
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+#define size 100
+    int precedence(char op)
+    {
+        if(op == '+' || op == '-')
+            return 1;
+        if(op == '*' || op == '/')
+            return 2;
+        return 0;
+    }
+    void infix_to_postfix(char*expression)
+    {
+        char stack[size];
+        int top = -1;
+        char postfixexpr[size];
+        int k = 0;
+        for(int i=0;i<strlen(expression);i++)
+        {
+            char ch=expression[i];
+            if(isalnum(ch))
+            {
+                postfixexpr[k++]=ch;
+            }
+            else if(ch == '(')
+            {
+                stack[++top]=ch;
+            }
+            else if(ch == ')')
+            {
+                while(top!= -1 && stack[top]!='(')
+                {
+                    postfixexpr[k++]=stack[top--];
+                }
+                top--;
+            }
+            else
+            {
+                while(top != -1 && precedence(stack[top])>=precedence(ch))
+                {
+                    postfixexpr[k++]=stack[top--];
+                }
+                stack[++top]=ch;
+            }
+        }
+
+        while(top != -1)
+        {
+            postfixexpr[k++]=stack[top--];
+        }
+        postfixexpr[k]='/0';
+        printf("postfix expression:%s",postfixexpr);
+
+    }
+    int main()
+    {
+        char expression[size];
+        printf("enter an infix expression:");
+        scanf("%s",&expression);
+        infix_to_postfix(expression);
+        return 0;
+
+    }
