@@ -1,0 +1,161 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *left, *right;
+};
+
+// Function to create a new node
+struct Node* newNode(int data) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->data = data;
+    node->left = node->right = NULL;
+    return node;
+}
+
+// Function to insert a node into the BST
+struct Node* insert(struct Node* root, int data) {
+    if (root == NULL) 
+        return newNode(data);
+    if (data < root->data)
+        root->left = insert(root->left, data);
+    else if (data > root->data)
+        root->right = insert(root->right, data);
+    return root;
+}
+
+// In-order Traversal
+void inorder(struct Node* root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+// Pre-order Traversal
+void preorder(struct Node* root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+// Post-order Traversal
+void postorder(struct Node* root) {
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+// Main Function
+int main() {
+    struct Node* root = NULL;
+    int choice, data;
+    
+    printf("Binary Search Tree\n");
+    while (1) {
+        printf("\n1. Insert\n2. In-order Traversal\n3. Pre-order Traversal\n4. Post-order Traversal\n5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                printf("Enter the value to insert: ");
+                scanf("%d", &data);
+                root = insert(root, data);
+                break;
+            case 2:
+                printf("In-order Traversal: ");
+                inorder(root);
+                printf("\n");
+                break;
+            case 3:
+                printf("Pre-order Traversal: ");
+                preorder(root);
+                printf("\n");
+                break;
+            case 4:
+                printf("Post-order Traversal: ");
+                postorder(root);
+                printf("\n");
+                break;
+            case 5:
+                exit(0);
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+    return 0;
+}
+OUTPUT:
+Binary Search Tree
+
+1. Insert
+2. In-order Traversal
+3. Pre-order Traversal
+4. Post-order Traversal
+5. Exit
+Enter your choice: 1
+Enter the value to insert: 2
+
+1. Insert
+2. In-order Traversal
+3. Pre-order Traversal
+4. Post-order Traversal
+5. Exit
+Enter your choice: 1
+Enter the value to insert: 3
+
+1. Insert
+2. In-order Traversal
+3. Pre-order Traversal
+4. Post-order Traversal
+5. Exit
+Enter your choice: 1
+Enter the value to insert: 4
+
+1. Insert
+2. In-order Traversal
+3. Pre-order Traversal
+4. Post-order Traversal
+5. Exit
+Enter your choice: 1
+Enter the value to insert: 8
+
+1. Insert
+2. In-order Traversal
+3. Pre-order Traversal
+4. Post-order Traversal
+5. Exit
+Enter your choice: 1
+Enter the value to insert: 9
+
+1. Insert
+2. In-order Traversal
+3. Pre-order Traversal
+4. Post-order Traversal
+5. Exit
+Enter your choice: 2
+In-order Traversal: 8 3 9 2 4
+
+1. Insert
+2. In-order Traversal
+3. Pre-order Traversal
+4. Post-order Traversal
+5. Exit
+Enter your choice: 3
+Pre-order Traversal: 2 3 4 8 9 
+
+1. Insert
+2. In-order Traversal
+3. Pre-order Traversal
+4. Post-order Traversal
+5. Exit
+Enter your choice: 4
+Post-order Traversal: 9 8 4 3 2 
+
