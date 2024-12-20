@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TABLE_SIZE 10  // Size of the hash table
+#define EMPTY -1       // Marker for an empty slot
+
+// Hash table structure
+struct HashMap {
+    int key;
+    int value;
+};
+
+// Initialize hash table
+void initTable(struct HashMap table[]) {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        table[i].key = EMPTY;  // Mark all slots as empty
+        table[i].value = 0;
+    }
+}
+
+// Hash function
+int hash(int key) {
+    return key % TABLE_SIZE;
+}
+
+// Insert key-value pair into the hash table
+void insert(struct HashMap table[], int key, int value) {
+    int index = hash(key);
+    int originalIndex = index;
+
+    // Linear probing to resolve collisions
+    while (table[index].key != EMPTY) {
+        index = (index + 1) % TABLE_SIZE;
+        if (index == originalIndex) {  // Table is full
+            printf("Hash table is full. Cannot insert key %d.\n", key);
+            return;
+        }
+    }
+
+    table[index].key = key;
+    table[index].value = value;
+    printf("Inserted (key: %d, value: %d) at index %d\n", key, value, index);
+}
+
+// Search for a key in the hash table
+void search(struct HashMap table[], int key) {
+    int index = hash(key);
+    int originalIndex = index;
+
+    // Linear probing to search for the key
+    while (table[index].key != EMPTY) {
+        if (table[index].key == key) {
+            printf("Key %d found with value %d at index %d\n", key, table[index].value, index);
+            return;
+        }
+        index = (index + 1) % TABLE_SIZE;
+        if (index == originalIndex) {  // Full cycle completed
+            break;
+        }
+    }
+    printf("Key %d not found in the table.\n", key);
+}
+
+// Display the hash table
+void display(struct HashMap table[]) {
+    printf("\nHash Table:\n");
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        if (table[i].key != EMPTY)
+            printf("Index %d -> Key: %d, Value: %d\n", i, table[i].key, table[i].value);
+        else
+            printf("Index %d -> Empty\n", i);
+    }
+    printf("\n");
+}
+
+int main() {
+    struct HashMap table[TABLE_SIZE];
+    int choice, key, value;
+
+    initTable(table);
+
+    while (1) {
+        printf("1. Insert\n2. Search\n3. Display\n4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter key and value to insert: ");
+                scanf("%d %d", &key, &value);
+                insert(table, key, value);
+                break;
+            case 2:
+                printf("Enter key to search: ");
+                scanf("%d", &key);
+                search(table, key);
+                break;
+            case 3:
+                display(table);
+                break;
+            case 4:
+                printf("Exiting...\n");
+                return 0;
+            default:
+                printf("Invalid choice. Try again.\n");
+        }
+    }
+
+    return 0;
+}
+OUTPUT:
+
+Enter choice: 1
+Enter key and value to insert: 15 100
+Inserted (key: 15, value: 100) at index 5
+
+Enter choice: 1
+Enter key and value to insert: 25 200
+Inserted (key: 25, value: 200) at index 6
+
+Enter choice: 3
+Hash Table:
+Index 0 -> Empty
+Index 1 -> Empty
+Index 5 -> Key: 15, Value: 100
+Index 6 -> Key: 25, Value: 200
+
+
+Enter choice: 2
+Enter key to search: 15
+Key 15 found with value 100 at index 5
+
+Enter choice: 2
+Enter key to search: 99
+Key 99 not found in the table.
+
+Enter choice: 4
+Exiting...
